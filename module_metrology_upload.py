@@ -14,26 +14,27 @@ from tkinter.constants import DISABLED, NORMAL
 from tkinter import END
 
 # Institute Specific Constants - MODIFY THESE!
-INSTITUTE = 'TRIUMF'
-INSTRUMENT = "Mitutoyo CMM"
+INSTITUTE = 'SFU'
+INSTRUMENT = "Smartscope Flash 302"
 SITE_TYPE = 'EC'
 HYBRID_FLEX_THICKNESS = 250 #um (Endcap)
 PB_FLEX_THICKNESS = 270 #um (Endcap)
 MAX_SHIELD_HEIGHT = 5710 #um (Endcap)
 
 # Do not modify.
-X_LIMIT = 100 #um
-Y_LIMIT = 300 #um
+X_LIMIT = 250 #um
+Y_LIMIT = 250 #um
 PATH_TO_DATA = 'module_metrology_data/metrology_data/'
 PATH_TO_POSITION_FILES = 'metrology_position_files/'
 PROGRAM_VERSION = 'v1'
-GLUE_RANGE = (80, 160) #um
+GLUE_RANGE = (40, 70, 170) #um
 X = 0
 Y = 1
 Z = 2
 ENTRY_X = 100
 ENTRY_Y = 20
 DATA_DICT = dict()
+problem_check = 0
 HYBRID_GT_REGEX = '_R[0-5]H[0-1]_[0-9]+'
 PB_GT_REGEX = 'PB_[0-5]'
 SHIELD_REGEX = 'Shield'
@@ -99,7 +100,9 @@ def get_metrology_results(lines):
     #Get rest of results
     cap_dict = dict()
     hybrid_gt_dict = dict()
+    abc_gt_dict = dict()
     pb_gt_dict = dict()
+    pb_gt_mod_dict = dict()
     shield_height = None
     for key, values in data_dict.items() :
         z_values = [round(row[Z], 4) for row in values]
@@ -107,8 +110,12 @@ def get_metrology_results(lines):
             cap_dict[key] = round(sum(z_values)/len(z_values)*1000)
         elif re.search(HYBRID_GT_REGEX, key) :
             hybrid_gt_dict[key] = round(sum(np.array(z_values)*1000 - HYBRID_FLEX_THICKNESS)/len(z_values))
+            if re.search("ABC", key) :
+                abc_gt_dict[key] = round(sum(np.array(z_values)*1000 - HYBRID_FLEX_THICKNESS)/len(z_values))
         elif re.search(PB_GT_REGEX, key) :
             pb_gt_dict[key] = round(sum(np.array(z_values)*1000 - PB_FLEX_THICKNESS)/len(z_values))
+            if re.search("PB_[0-4]", key) :
+                pb_gt_mod_dict[key] = round(sum(np.array(z_values)*1000 - PB_FLEX_THICKNESS)/len(z_values))
         elif re.search(SHIELD_REGEX, key) :
             shield_height = round(max(z_values)*1000)
 
@@ -124,12 +131,16 @@ def get_metrology_results(lines):
         results["PB_GLUE_THICKNESS"] = None
     else :
         results["PB_GLUE_THICKNESS"] = pb_gt_dict
+        results["PB_GLUE_MOD_THICKNESS"] = pb_gt_mod_dict
     results["HYBRID_POSITION"] = hybrid_dict
     results["HYBRID_GLUE_THICKNESS"] = hybrid_gt_dict
+    results["ABC_GLUE_THICKNESS"] = abc_gt_dict
     results["SHIELDBOX_HEIGHT"] = shield_height
     results["FILE"] = ""
     print(results)
 
+<<<<<<< HEAD
+=======
     plt.figure(1)
     fig, ax = plt.subplots()
     ax.plot(cap_dict.keys(), cap_dict.values(), 'k-', label = "glue height")
@@ -157,6 +168,7 @@ def get_metrology_results(lines):
     plt.title("Powerboard Glue Heights")
     plt.ylabel("Glue Thickness [um]")
     plt.show()
+>>>>>>> 3280e6d1e9f43fac566944a234e1c7958f7716e7
     return results
 
 def test_passed():
@@ -173,29 +185,46 @@ def test_passed():
         for point in DATA_DICT['results']['PB_POSITION'].values():
             x_positions.append(point[X])
             y_positions.append(point[Y])
-
-    position_x_check =  -X_LIMIT < np.abs(np.array(x_positions)).all() < X_LIMIT
-    position_y_check =  -Y_LIMIT < np.abs(np.array(y_positions)).all() < Y_LIMIT
+    print("X positions: ", x_positions)
+    print("Y positions: ", y_positions)
+    position_x_check =  all(-X_LIMIT < pos < X_LIMIT for pos in np.abs(np.array(x_positions)))
+    position_y_check =  all(-Y_LIMIT < pos < Y_LIMIT for pos in np.abs(np.array(y_positions)))
     if not position_x_check or not position_y_check:
         output += "Failure - Position exceeds tolerance in one or more dimensions.\n"
 
 
     # Check the hybrid glue thickness
     hybrid_gts = []
+    abc_gts = []
     for height in DATA_DICT['results']['HYBRID_GLUE_THICKNESS'].values():
         hybrid_gts.append(height)
+    for height in DATA_DICT['results']['ABC_GLUE_THICKNESS'].values():
+        abc_gts.append(height)
     # hybrid_gt_check = GLUE_RANGE[0] < np.array(hybrid_gts).all() < GLUE_RANGE[1]
-    hybrid_gt_check = all(GLUE_RANGE[0] < gt < GLUE_RANGE[1] for gt in np.array(hybrid_gts))
-    if not hybrid_gt_check:
+    abc_gts_avg = sum(abc_gts)/len(abc_gts)
+    print("ABC average glue height is:", abc_gts_avg)
+    hybrid_gt_check = GLUE_RANGE[0] <= abc_gts_avg <= GLUE_RANGE[2]
+    if (GLUE_RANGE[0] <= abc_gts_avg <= GLUE_RANGE[1]):
+        output += "Hybrid glue thickness passes with problems.\n"
+        problem_check = 1
+    elif not hybrid_gt_check:
         output += "Failure - Hybrid glue thickness exceeds tolerance.\n"
 
     # Then the powerboard
     if DATA_DICT['results']['PB_GLUE_THICKNESS'] is not None :
         pb_gts = []
+        pb_gts_mod = []
         for height in DATA_DICT['results']['PB_GLUE_THICKNESS'].values():
             pb_gts.append(height)
-        pb_gt_check = all(GLUE_RANGE[0] < gt < GLUE_RANGE[1] for gt in np.array(pb_gts))
-        if not pb_gt_check:
+        for height in DATA_DICT['results']['PB_GLUE_MOD_THICKNESS'].values():
+            pb_gts_mod.append(height)
+        pb_gts_avg = sum(pb_gts_mod)/len(pb_gts_mod)
+        print("PB 1-4 average glue height is:", pb_gts_avg)
+        pb_gt_check = GLUE_RANGE[0] <= pb_gts_avg <= GLUE_RANGE[2]
+        if (GLUE_RANGE[0] <= pb_gts_avg <= GLUE_RANGE[1]):
+            output += "Powerboard glue thickness passes with problems.\n"
+            problem_check = 1
+        elif not pb_gt_check:
             output += "Failure - PB glue thickness exceeds tolerance.\n"
     else:
         pb_gt_check = True
@@ -207,7 +236,7 @@ def test_passed():
             output += "Failure - Sheild is too high.\n"
     else:
          shield_check = True
-    
+
     if all([position_x_check, position_y_check, hybrid_gt_check, pb_gt_check, shield_check]):
         output += 'All tests passed! Proceed to upload.'
     else:
@@ -215,7 +244,7 @@ def test_passed():
 
     output_text.set(output)
     return all([position_x_check, position_y_check, hybrid_gt_check, pb_gt_check, shield_check])
-        
+
 
 def get_file_data():
     """Get the data from a file using the search function and format it into the standard JSON dictionary."""
@@ -252,7 +281,7 @@ def get_file_data():
     shield_height_box.configure(state=DISABLED)
 
     file = filedialog.askopenfilename(initialdir = PATH_TO_DATA, title = 'Select Data File')
-    
+
     # Get the data from the file
     with open(file) as data_file:
         lines = data_file.readlines()
@@ -268,12 +297,12 @@ def get_file_data():
     operator = lines[6].split()
     properties["MACHINE"] = " ".join(machine[2:])
     properties["OPERATOR"] = " ".join(operator[1:])
-    properties["SCRIPT_VERSION"] = lines[9].split()[3] 
-    DATA_DICT["properties"] = properties 
+    properties["SCRIPT_VERSION"] = lines[9].split()[3]
+    DATA_DICT["properties"] = properties
     DATA_DICT["results"] = get_metrology_results(lines)
     DATA_DICT["results"]["FILE"] = file
     DATA_DICT['passed'] = test_passed()
-    
+
     # Update the output for the user.
     id_box.configure(state=NORMAL)
     run_num_box.configure(state=NORMAL)
@@ -295,7 +324,7 @@ def get_file_data():
     cap_height_box.insert('1.0', print_format(DATA_DICT["results"]["CAP_HEIGHT"]))
     if DATA_DICT["results"]["SHIELDBOX_HEIGHT"] is not None :
         shield_height_box.insert('1.0', DATA_DICT["results"]["SHIELDBOX_HEIGHT"])
-    else : 
+    else :
         shield_height_box.insert('1.0', 'None')
 
     id_box.configure(state=DISABLED)
@@ -308,6 +337,35 @@ def get_file_data():
     cap_height_box.configure(state=DISABLED)
     shield_height_box.configure(state=DISABLED)
 
+    ##
+    # plt.figure(1)
+    # fig, ax = plt.subplots()
+    # ax.plot(cap_dict.keys(), cap_dict.values(), 'k-', label="glue height")
+    # ax.plot(cap_dict.keys(), np.full((len(cap_dict), 1), GLUE_RANGE[0]), 'r--', label="min")
+    # ax.plot(cap_dict.keys(), np.full((len(cap_dict), 1), GLUE_RANGE[1]), 'r--', label="max")
+    # # plt.plot([1, 2, 3, 4])
+    # plt.title("Capacitor Package Heights")
+    # plt.ylabel("Glue Thickness [um]")
+    #
+    # plt.figure(2)
+    # fig1, ax = plt.subplots()
+    # ax.plot(hybrid_gt_dict.keys(), hybrid_gt_dict.values(), 'k-', label="glue height")
+    # ax.plot(hybrid_gt_dict.keys(), np.full((len(hybrid_gt_dict), 1), GLUE_RANGE[0]), 'r--', label="min")
+    # ax.plot(hybrid_gt_dict.keys(), np.full((len(hybrid_gt_dict), 1), GLUE_RANGE[1]), 'r--', label="max")
+    # # plt.plot([1, 2, 3, 4])
+    # plt.title("Hybrid Glue Heights")
+    # plt.ylabel("Glue Thickness [um]")
+    #
+    # plt.figure(3)
+    # fig2, ax = plt.subplots()
+    # ax.plot(pb_gt_dict.keys(), pb_gt_dict.values(), 'k-', label="glue height")
+    # ax.plot(pb_gt_dict.keys(), np.full((len(pb_gt_dict), 1), GLUE_RANGE[0]), 'r--', label="min")
+    # ax.plot(pb_gt_dict.keys(), np.full((len(pb_gt_dict), 1), GLUE_RANGE[1]), 'r--', label="max")
+    # plt.plot([1, 2, 3, 4])
+    # plt.title("Powerboard Glue Heights")
+    # plt.ylabel("Glue Thickness [um]")
+    # plt.show()
+    #
 
 def save_data():
     """Saves a metrology data file in the standard file format"""
@@ -333,7 +391,7 @@ def save_data():
     result= client.post("uploadTestRunResults", json = DATA_DICT)
 
     if (('uuAppErrorMap')=={}):
-        output_text.set('Upload of Test and File Succesful!')
+        output_text.set('Upload of Test and File Successful!')
     elif (('uuAppErrorMap'))[0]=='cern-itkpd-main/uploadTestRunResults/':
         output_text.set("Error in Test Upload.")
     elif list(('uuAppErrorMap'))[0]=='cern-itkpd-main/uploadTestRunResults/componentAtDifferentLocation':
@@ -341,7 +399,7 @@ def save_data():
     elif (('uuAppErrorMap'))[0]=='cern-itkpd-main/uploadTestRunResults/unassociatedStageWithTestType':
         output_text.set('Component cannot be uploaded as the current stage does not have this test type. You will need to update the stage of the component on the ITK DB. Note that due to a bug on the ITK DB, you might also get this error if the component is not at your current location.')
     elif (('uuAppErrorMap'))[0]!='cern-itkpd-main/uploadTestRunResults/':
-        output_text.set("Upload of Test Succesful!")
+        output_text.set("Upload of Test Successful!")
     else:
         output_text.set('Error!')
             
