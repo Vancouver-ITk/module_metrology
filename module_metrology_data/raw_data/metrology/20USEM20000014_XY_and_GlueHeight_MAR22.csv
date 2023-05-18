@@ -1,0 +1,160 @@
+Feature Type,Feature Label,Feature ID,Element,Actual,Nominal,Deviat.(TP Dev),Up Tol.(TP Tol),Low Tol.,Pass/Fail
+Point,Module_X_Axis,8,Coord. X,  127.554194
+Point,Module_X_Axis,8,Coord. Y,    0.000000
+Point,Module_X_Axis,8,Coord. Z,    0.000000
+Point,Module_Origin,9,Coord. X,    0.000000
+Point,Module_Origin,9,Coord. Y,    0.000000
+Point,Module_Origin,9,Coord. Z,    0.000000
+Point,PB_P1,12,Coord. X,   81.807186,   81.879000,   -0.071814,    0.100000,   -0.100000,PASS
+Point,PB_P1,12,Coord. Y,  -10.508047,  -10.595000,    0.086953,    0.300000,   -0.300000,PASS
+Point,PB_P1,12,Coord. Z,    0.303110,    0.000000,    0.303110
+Point,PB_P2,13,Coord. X,  122.290443,  122.388000,   -0.097557,    0.100000,   -0.100000,PASS
+Point,PB_P2,13,Coord. Y,   -1.082940,   -1.135000,    0.052060,    0.300000,   -0.300000,PASS
+Point,PB_P2,13,Coord. Z,    0.376151,    0.000000,    0.376151
+Point,PB_1,14,Coord. X,  123.688825,    0.000000,  123.688825
+Point,PB_1,14,Coord. Y,   -3.111029,    0.000000,   -3.111029
+Point,PB_1,14,Coord. Z,    0.402408,    0.390000,    0.012408,    0.040000,   -0.040000,PASS
+Point,PB_2,15,Coord. X,  122.130976
+Point,PB_2,15,Coord. Y,  -12.828213
+Point,PB_2,15,Coord. Z,    0.240471
+Point,PB_3,16,Coord. X,   87.053960,    0.000000,   87.053960
+Point,PB_3,16,Coord. Y,  -10.358580,    0.000000,  -10.358580
+Point,PB_3,16,Coord. Z,    0.435350,    0.390000,    0.045350,    0.040000,   -0.040000,FAIL
+Point,PB_4,17,Coord. X,   85.770654,    0.000000,   85.770654
+Point,PB_4,17,Coord. Y,   -0.750735,    0.000000,   -0.750735
+Point,PB_4,17,Coord. Z,    0.517372,    0.390000,    0.127372,    0.040000,   -0.040000,FAIL
+Point,PB_5,18,Coord. X,   59.976384,    0.000000,   59.976384
+Point,PB_5,18,Coord. Y,   -2.743565,    0.000000,   -2.743565
+Point,PB_5,18,Coord. Z,    0.346853,    0.390000,   -0.043147,    0.040000,   -0.040000,FAIL
+Point,Shield,19,Coord. X,   70.735934
+Point,Shield,19,Coord. Y,   -2.808613
+Point,Shield,19,Coord. Z,    5.380502
+Point,C1,20,Coord. X,  117.928271
+Point,C1,20,Coord. Y,   -5.865483
+Point,C1,20,Coord. Z,    2.929462
+Point,C2,21,Coord. X,  117.721803
+Point,C2,21,Coord. Y,   -9.210593
+Point,C2,21,Coord. Z,    2.879755
+Point,C3,22,Coord. X,  103.836198
+Point,C3,22,Coord. Y,   -9.943522
+Point,C3,22,Coord. Z,    2.786099
+Point,C4,23,Coord. X,  104.337916
+Point,C4,23,Coord. Y,   -1.431987
+Point,C4,23,Coord. Z,    2.918441
+Point,H_R2H0_P1,26,Coord. X,    4.170413,    4.244000,   -0.073587,    0.100000,   -0.100000,PASS
+Point,H_R2H0_P1,26,Coord. Y,  -23.194156,  -23.221000,    0.026844,    0.300000,   -0.300000,PASS
+Point,H_R2H0_P1,26,Coord. Z,    0.298272,    0.000000,    0.298272
+Point,H_R2H0_P2,27,Coord. X,  124.172096,  124.211000,   -0.038904,    0.100000,   -0.100000,PASS
+Point,H_R2H0_P2,27,Coord. Y,  -25.809632,  -25.858000,    0.048368,    0.300000,   -0.300000,PASS
+Point,H_R2H0_P2,27,Coord. Z,    0.301718,    0.000000,    0.301718
+Point,ABC_R2H0_0,28,Coord. X,  124.278856,    0.000000,  124.278856
+Point,ABC_R2H0_0,28,Coord. Y,  -24.516772,    0.000000,  -24.516772
+Point,ABC_R2H0_0,28,Coord. Z,    0.352125,    0.390000,   -0.037875,    0.040000,   -0.040000,PASS
+Point,ABC_R2H0_1,29,Coord. X,  114.235579,    0.000000,  114.235579
+Point,ABC_R2H0_1,29,Coord. Y,  -23.627422,    0.000000,  -23.627422
+Point,ABC_R2H0_1,29,Coord. Z,    0.326330,    0.390000,   -0.063670,    0.040000,   -0.040000,FAIL
+Point,ABC_R2H0_2,30,Coord. X,  104.140554,    0.000000,  104.140554
+Point,ABC_R2H0_2,30,Coord. Y,  -22.878663,    0.000000,  -22.878663
+Point,ABC_R2H0_2,30,Coord. Z,    0.330751,    0.390000,   -0.059249,    0.040000,   -0.040000,FAIL
+Point,ABC_R2H0_3,31,Coord. X,   94.046815,    0.000000,   94.046815
+Point,ABC_R2H0_3,31,Coord. Y,  -22.301059,    0.000000,  -22.301059
+Point,ABC_R2H0_3,31,Coord. Z,    0.332275,    0.390000,   -0.057725,    0.040000,   -0.040000,FAIL
+Point,ABC_R2H0_4,32,Coord. X,   83.933167,    0.000000,   83.933167
+Point,ABC_R2H0_4,32,Coord. Y,  -21.874749,    0.000000,  -21.874749
+Point,ABC_R2H0_4,32,Coord. Z,    0.316373,    0.390000,   -0.073627,    0.040000,   -0.040000,FAIL
+Point,ABC_R2H0_5,33,Coord. X,   73.814381,    0.000000,   73.814381
+Point,ABC_R2H0_5,33,Coord. Y,  -21.621590,    0.000000,  -21.621590
+Point,ABC_R2H0_5,33,Coord. Z,    0.306281,    0.390000,   -0.083719,    0.040000,   -0.040000,FAIL
+Point,ABC_R2H0_6,34,Coord. X,   63.682391,    0.000000,   63.682391
+Point,ABC_R2H0_6,34,Coord. Y,  -21.537988,    0.000000,  -21.537988
+Point,ABC_R2H0_6,34,Coord. Z,    0.311672,    0.390000,   -0.078328,    0.040000,   -0.040000,FAIL
+Point,ABC_R2H0_7,35,Coord. X,   53.536394,    0.000000,   53.536394
+Point,ABC_R2H0_7,35,Coord. Y,  -21.628469,    0.000000,  -21.628469
+Point,ABC_R2H0_7,35,Coord. Z,    0.319760,    0.390000,   -0.070240,    0.040000,   -0.040000,FAIL
+Point,ABC_R2H0_8,36,Coord. X,   43.415885,    0.000000,   43.415885
+Point,ABC_R2H0_8,36,Coord. Y,  -21.893740,    0.000000,  -21.893740
+Point,ABC_R2H0_8,36,Coord. Z,    0.323558,    0.390000,   -0.066442,    0.040000,   -0.040000,FAIL
+Point,ABC_R2H0_9,37,Coord. X,   33.294697,    0.000000,   33.294697
+Point,ABC_R2H0_9,37,Coord. Y,  -22.315813,    0.000000,  -22.315813
+Point,ABC_R2H0_9,37,Coord. Z,    0.334712,    0.390000,   -0.055288,    0.040000,   -0.040000,FAIL
+Point,ABC_R2H0_10,38,Coord. X,   23.144840,    0.000000,   23.144840
+Point,ABC_R2H0_10,38,Coord. Y,  -22.888319,    0.000000,  -22.888319
+Point,ABC_R2H0_10,38,Coord. Z,    0.340115,    0.390000,   -0.049885,    0.040000,   -0.040000,FAIL
+Point,ABC_R2H0_11,39,Coord. X,   13.018914,    0.000000,   13.018914
+Point,ABC_R2H0_11,39,Coord. Y,  -23.660403,    0.000000,  -23.660403
+Point,ABC_R2H0_11,39,Coord. Z,    0.348996,    0.390000,   -0.041004,    0.040000,   -0.040000,FAIL
+Point,H_R2H0_0,40,Coord. X,    2.871892,    0.000000,    2.871892
+Point,H_R2H0_0,40,Coord. Y,  -10.747327,    0.000000,  -10.747327
+Point,H_R2H0_0,40,Coord. Z,    0.248082,    0.390000,   -0.141918,    0.040000,   -0.040000,FAIL
+Point,HCC_R2H0_0,41,Coord. X,    9.319220,    0.000000,    9.319220
+Point,HCC_R2H0_0,41,Coord. Y,  -11.503917,    0.000000,  -11.503917
+Point,HCC_R2H0_0,41,Coord. Z,    0.342122,    0.390000,   -0.047878,    0.040000,   -0.040000,FAIL
+Point,HCC_R2H0_1,42,Coord. X,   19.661222,    0.000000,   19.661222
+Point,HCC_R2H0_1,42,Coord. Y,   -6.892702,    0.000000,   -6.892702
+Point,HCC_R2H0_1,42,Coord. Z,    0.317558,    0.390000,   -0.072442,    0.040000,   -0.040000,FAIL
+Point,H_R2H0_1,43,Coord. X,   87.581574,    0.000000,   87.581574
+Point,H_R2H0_1,43,Coord. Y,  -12.839651,    0.000000,  -12.839651
+Point,H_R2H0_1,43,Coord. Z,    0.365253,    0.390000,   -0.024747,    0.040000,   -0.040000,PASS
+Point,H_R2H0_2,44,Coord. X,  117.735467,    0.000000,  117.735467
+Point,H_R2H0_2,44,Coord. Y,  -16.370008,    0.000000,  -16.370008
+Point,H_R2H0_2,44,Coord. Z,    0.352412,    0.390000,   -0.037588,    0.040000,   -0.040000,PASS
+Point,Sensor_1,45,Coord. X,    1.195195
+Point,Sensor_1,45,Coord. Y,   -0.892800
+Point,Sensor_1,45,Coord. Z,   -0.016567
+Point,Sensor_2,46,Coord. X,   10.668461
+Point,Sensor_2,46,Coord. Y,   -1.869876
+Point,Sensor_2,46,Coord. Z,   -0.058433
+Point,Sensor_3,47,Coord. X,   22.646349
+Point,Sensor_3,47,Coord. Y,   -0.838787
+Point,Sensor_3,47,Coord. Z,   -0.068976
+Point,Sensor_4,48,Coord. X,   59.240031
+Point,Sensor_4,48,Coord. Y,    1.287017
+Point,Sensor_4,48,Coord. Z,   -0.074446
+Point,Sensor_5,49,Coord. X,  125.104832
+Point,Sensor_5,49,Coord. Y,  -14.183844
+Point,Sensor_5,49,Coord. Z,   -0.031174
+Point,Sensor_6,50,Coord. X,   87.495510
+Point,Sensor_6,50,Coord. Y,  -11.907096
+Point,Sensor_6,50,Coord. Z,   -0.063725
+Point,Sensor_7,51,Coord. X,    9.506971
+Point,Sensor_7,51,Coord. Y,  -29.000577
+Point,Sensor_7,51,Coord. Z,   -0.043376
+Point,Sensor_8,52,Coord. X,   19.898549
+Point,Sensor_8,52,Coord. Y,  -27.905448
+Point,Sensor_8,52,Coord. Z,   -0.057628
+Point,Sensor_9,53,Coord. X,   29.802026
+Point,Sensor_9,53,Coord. Y,  -27.186275
+Point,Sensor_9,53,Coord. Z,   -0.065361
+Point,Sensor_10,54,Coord. X,   39.934294
+Point,Sensor_10,54,Coord. Y,  -26.816710
+Point,Sensor_10,54,Coord. Z,   -0.074786
+Point,Sensor_11,55,Coord. X,   49.712334
+Point,Sensor_11,55,Coord. Y,  -26.546167
+Point,Sensor_11,55,Coord. Z,   -0.081373
+Point,Sensor_12,56,Coord. X,   59.622969
+Point,Sensor_12,56,Coord. Y,  -26.740616
+Point,Sensor_12,56,Coord. Z,   -0.087350
+Point,Sensor_13,57,Coord. X,   70.276219
+Point,Sensor_13,57,Coord. Y,  -26.594329
+Point,Sensor_13,57,Coord. Z,   -0.087298
+Point,Sensor_14,58,Coord. X,   79.917619
+Point,Sensor_14,58,Coord. Y,  -27.133331
+Point,Sensor_14,58,Coord. Z,   -0.089528
+Point,Sensor_15,59,Coord. X,   89.083172
+Point,Sensor_15,59,Coord. Y,  -27.400465
+Point,Sensor_15,59,Coord. Z,   -0.085390
+Point,Sensor_16,60,Coord. X,   99.283719
+Point,Sensor_16,60,Coord. Y,  -27.756270
+Point,Sensor_16,60,Coord. Z,   -0.084797
+Point,Sensor_17,61,Coord. X,  109.646897
+Point,Sensor_17,61,Coord. Y,  -28.706798
+Point,Sensor_17,61,Coord. Z,   -0.074704
+Point,Sensor_18,62,Coord. X,  119.014768
+Point,Sensor_18,62,Coord. Y,  -29.423377
+Point,Sensor_18,62,Coord. Z,   -0.067947
+Point,Sensor_19,63,Coord. X,  121.064692
+Point,Sensor_19,63,Coord. Y,  -60.454940
+Point,Sensor_19,63,Coord. Z,    0.013255
+Point,Sensor_20,64,Coord. X,    8.413628
+Point,Sensor_20,64,Coord. Y,  -60.904227
+Point,Sensor_20,64,Coord. Z,    0.044582

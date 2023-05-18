@@ -1,0 +1,24 @@
+#---Header
+EC or Barrel: EC
+Module type: R2
+Module ref. Number: 20USEM2000023
+Date: 2022-07-11T17:37:40.942010Z
+Institute: SFU
+Operator: AR
+Instrument Type: Smartscope_Flash_302
+Run Number: 2
+Measurement program version: v1
+#---Bow
+#Locations	X[mm]	Y[mm]	Z[mm]
+Sensor	9.0994	28.8752	-0.0034
+Sensor	19.1285	28.0555	0.0030
+Sensor	29.1661	27.4016	0.0004
+Sensor	39.2115	26.9151	0.0014
+Sensor	49.2689	26.5930	0.0006
+Sensor	59.3285	26.4359	0.0008
+Sensor	69.3872	26.4467	-0.0018
+Sensor	79.4447	26.6214	0.0001
+Sensor	89.4989	26.9607	-0.0022
+Sensor	99.5473	27.4694	-0.0005
+Sensor	109.5834	28.1398	0.0001
+Sensor	119.6073	28.9776	0.0015

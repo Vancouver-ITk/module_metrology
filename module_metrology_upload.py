@@ -35,13 +35,14 @@ ENTRY_X = 100
 ENTRY_Y = 20
 DATA_DICT = dict()
 problem_check = 0
-HYBRID_GT_REGEX = '_R[0-5]H[0-1]_[0-9]+'
+HYBRID0_GT_REGEX = '_R[0-5]H0_[0-9]+'
+HYBRID1_GT_REGEX = '_R[0-5]H1_[0-9]+'
 PB_GT_REGEX = 'PB_[0-5]'
 SHIELD_REGEX = 'Shield'
 CAP_REGEX = 'C[1-8]'
 
 def get_comp_dict(module_type):
-    """Gets the postision dictionary to determine flex offsets."""
+    """Gets the position dictionary to determine flex offsets."""
     file_name = PATH_TO_POSITION_FILES + module_type + "_positions.csv"
     with open(file_name) as csv_file :
         reader = csv.reader(csv_file, delimiter = ',')
@@ -100,18 +101,24 @@ def get_metrology_results(lines):
     #Get rest of results
     cap_dict = dict()
     hybrid_gt_dict = dict()
-    abc_gt_dict = dict()
+    # hybrid1_gt_dict = dict()
+    abc0_gt_dict = dict()
+    abc1_gt_dict = dict()
     pb_gt_dict = dict()
     pb_gt_mod_dict = dict()
     shield_height = None
     for key, values in data_dict.items() :
-        z_values = [round(row[Z], 4) for row in values]
+        z_values = [row[Z] for row in values]
         if re.search(CAP_REGEX, key) :
             cap_dict[key] = round(sum(z_values)/len(z_values)*1000)
-        elif re.search(HYBRID_GT_REGEX, key) :
+        elif re.search(HYBRID0_GT_REGEX, key) :
             hybrid_gt_dict[key] = round(sum(np.array(z_values)*1000 - HYBRID_FLEX_THICKNESS)/len(z_values))
             if re.search("ABC", key) :
-                abc_gt_dict[key] = round(sum(np.array(z_values)*1000 - HYBRID_FLEX_THICKNESS)/len(z_values))
+                abc0_gt_dict[key] = round(sum(np.array(z_values)*1000 - HYBRID_FLEX_THICKNESS)/len(z_values))
+        elif re.search(HYBRID1_GT_REGEX, key) :
+            hybrid_gt_dict[key] = round(sum(np.array(z_values)*1000 - HYBRID_FLEX_THICKNESS)/len(z_values))
+            if re.search("ABC", key) :
+                abc1_gt_dict[key] = round(sum(np.array(z_values)*1000 - HYBRID_FLEX_THICKNESS)/len(z_values))
         elif re.search(PB_GT_REGEX, key) :
             pb_gt_dict[key] = round(sum(np.array(z_values)*1000 - PB_FLEX_THICKNESS)/len(z_values))
             if re.search("PB_[0-4]", key) :
@@ -134,41 +141,36 @@ def get_metrology_results(lines):
         results["PB_GLUE_MOD_THICKNESS"] = pb_gt_mod_dict
     results["HYBRID_POSITION"] = hybrid_dict
     results["HYBRID_GLUE_THICKNESS"] = hybrid_gt_dict
-    results["ABC_GLUE_THICKNESS"] = abc_gt_dict
+    results["ABC0_GLUE_THICKNESS"] = abc0_gt_dict
+    results["ABC1_GLUE_THICKNESS"] = abc1_gt_dict
     results["SHIELDBOX_HEIGHT"] = shield_height
     results["FILE"] = ""
     print(results)
 
-<<<<<<< HEAD
-=======
-    plt.figure(1)
-    fig, ax = plt.subplots()
-    ax.plot(cap_dict.keys(), cap_dict.values(), 'k-', label = "glue height")
-    ax.plot(cap_dict.keys(), np.full((len(cap_dict), 1), GLUE_RANGE[0]), 'r--', label = "min")
-    ax.plot(cap_dict.keys(), np.full((len(cap_dict), 1), GLUE_RANGE[1]), 'r--', label = "max")
-    # plt.plot([1, 2, 3, 4])
-    plt.title("Capacitor Package Heights")
-    plt.ylabel("Glue Thickness [um]")
+    # plt.figure(1)
+    # fig, ax = plt.subplots()
+    # ax.plot(cap_dict.keys(), cap_dict.values(), 'k-', label = "glue height")
+    # ax.plot(cap_dict.keys(), np.full((len(cap_dict), 1), GLUE_RANGE[0]), 'r--', label = "min")
+    # ax.plot(cap_dict.keys(), np.full((len(cap_dict), 1), GLUE_RANGE[1]), 'r--', label = "max")
+    # plt.title("Capacitor Package Heights")
+    # plt.ylabel("Glue Thickness [um]")
 
-    plt.figure(2)
-    fig1, ax = plt.subplots()
-    ax.plot(hybrid_gt_dict.keys(), hybrid_gt_dict.values(), 'k-', label="glue height")
-    ax.plot(hybrid_gt_dict.keys(), np.full((len(hybrid_gt_dict), 1), GLUE_RANGE[0]), 'r--', label="min")
-    ax.plot(hybrid_gt_dict.keys(), np.full((len(hybrid_gt_dict), 1), GLUE_RANGE[1]), 'r--', label="max")
-    # plt.plot([1, 2, 3, 4])
-    plt.title("Hybrid Glue Heights")
-    plt.ylabel("Glue Thickness [um]")
+    # plt.figure(2)
+    # fig1, ax = plt.subplots()
+    # ax.plot(hybrid_gt_dict.keys(), hybrid_gt_dict.values(), 'k-', label="glue height")
+    # ax.plot(hybrid_gt_dict.keys(), np.full((len(hybrid_gt_dict), 1), GLUE_RANGE[0]), 'r--', label="min")
+    # ax.plot(hybrid_gt_dict.keys(), np.full((len(hybrid_gt_dict), 1), GLUE_RANGE[1]), 'r--', label="max")
+    # plt.title("Hybrid Glue Heights")
+    #plt.ylabel("Glue Thickness [um]")
 
-    plt.figure(3)
-    fig2, ax = plt.subplots()
-    ax.plot(pb_gt_dict.keys(), pb_gt_dict.values(), 'k-', label="glue height")
-    ax.plot(pb_gt_dict.keys(), np.full((len(pb_gt_dict), 1), GLUE_RANGE[0]), 'r--', label="min")
-    ax.plot(pb_gt_dict.keys(), np.full((len(pb_gt_dict), 1), GLUE_RANGE[1]), 'r--', label="max")
-    # plt.plot([1, 2, 3, 4])
-    plt.title("Powerboard Glue Heights")
-    plt.ylabel("Glue Thickness [um]")
-    plt.show()
->>>>>>> 3280e6d1e9f43fac566944a234e1c7958f7716e7
+    # plt.figure(3)
+    # fig2, ax = plt.subplots()
+    # ax.plot(pb_gt_dict.keys(), pb_gt_dict.values(), 'k-', label="glue height")
+    # ax.plot(pb_gt_dict.keys(), np.full((len(pb_gt_dict), 1), GLUE_RANGE[0]), 'r--', label="min")
+    # ax.plot(pb_gt_dict.keys(), np.full((len(pb_gt_dict), 1), GLUE_RANGE[1]), 'r--', label="max")
+    #plt.title("Powerboard Glue Heights")
+    #  plt.ylabel("Glue Thickness [um]")
+    # plt.show()
     return results
 
 def test_passed():
@@ -195,20 +197,39 @@ def test_passed():
 
     # Check the hybrid glue thickness
     hybrid_gts = []
-    abc_gts = []
+    abc0_gts = []
+    abc1_gts = []
     for height in DATA_DICT['results']['HYBRID_GLUE_THICKNESS'].values():
         hybrid_gts.append(height)
-    for height in DATA_DICT['results']['ABC_GLUE_THICKNESS'].values():
-        abc_gts.append(height)
+    for height in DATA_DICT['results']['ABC0_GLUE_THICKNESS'].values():
+        abc0_gts.append(height)
+    for height in DATA_DICT['results']['ABC1_GLUE_THICKNESS'].values():
+        abc1_gts.append(height)
     # hybrid_gt_check = GLUE_RANGE[0] < np.array(hybrid_gts).all() < GLUE_RANGE[1]
-    abc_gts_avg = sum(abc_gts)/len(abc_gts)
-    print("ABC average glue height is:", abc_gts_avg)
-    hybrid_gt_check = GLUE_RANGE[0] <= abc_gts_avg <= GLUE_RANGE[2]
-    if (GLUE_RANGE[0] <= abc_gts_avg <= GLUE_RANGE[1]):
-        output += "Hybrid glue thickness passes with problems.\n"
-        problem_check = 1
-    elif not hybrid_gt_check:
-        output += "Failure - Hybrid glue thickness exceeds tolerance.\n"
+    if DATA_DICT['results']['ABC0_GLUE_THICKNESS'] is not None:
+        abc0_gts_avg = sum(abc0_gts) / len(abc0_gts)
+        print("ABC average glue height under hybrid 0 is:", abc0_gts_avg)
+
+        hybrid0_gt_check = GLUE_RANGE[0] <= abc0_gts_avg <= GLUE_RANGE[2]
+        if (GLUE_RANGE[0] <= abc0_gts_avg <= GLUE_RANGE[1]):
+            output += "Hybrid0 glue thickness passes with problems.\n"
+        elif not hybrid0_gt_check:
+            output += "Failure - Hybrid0 glue thickness exceeds tolerance.\n"
+    else:
+        hybrid0_gt_check = True
+
+    if DATA_DICT['results']['ABC1_GLUE_THICKNESS'] is not None:
+        abc1_gts_avg = sum(abc1_gts) / len(abc1_gts)
+        print("ABC average glue height under hybrid 1 is:", abc1_gts_avg)
+
+        hybrid1_gt_check = GLUE_RANGE[0] <= abc1_gts_avg <= GLUE_RANGE[2]
+        if (GLUE_RANGE[0] <= abc1_gts_avg <= GLUE_RANGE[1]):
+            output += "Hybrid1 glue thickness passes with problems.\n"
+        elif not hybrid1_gt_check:
+            output += "Failure - Hybrid1 glue thickness exceeds tolerance.\n"
+    else:
+        hybrid1_gt_check = True
+
 
     # Then the powerboard
     if DATA_DICT['results']['PB_GLUE_THICKNESS'] is not None :
@@ -223,7 +244,6 @@ def test_passed():
         pb_gt_check = GLUE_RANGE[0] <= pb_gts_avg <= GLUE_RANGE[2]
         if (GLUE_RANGE[0] <= pb_gts_avg <= GLUE_RANGE[1]):
             output += "Powerboard glue thickness passes with problems.\n"
-            problem_check = 1
         elif not pb_gt_check:
             output += "Failure - PB glue thickness exceeds tolerance.\n"
     else:
@@ -233,17 +253,17 @@ def test_passed():
     if DATA_DICT['results']['SHIELDBOX_HEIGHT'] is not None:
         shield_check = DATA_DICT['results']['SHIELDBOX_HEIGHT'] < MAX_SHIELD_HEIGHT
         if not shield_check:
-            output += "Failure - Sheild is too high.\n"
+            output += "Failure - Shield is too high.\n"
     else:
          shield_check = True
 
-    if all([position_x_check, position_y_check, hybrid_gt_check, pb_gt_check, shield_check]):
+    if all([position_x_check, position_y_check, hybrid0_gt_check, hybrid1_gt_check, pb_gt_check, shield_check]):
         output += 'All tests passed! Proceed to upload.'
     else:
         output += 'One or more failures. Upload if you wish.'
 
     output_text.set(output)
-    return all([position_x_check, position_y_check, hybrid_gt_check, pb_gt_check, shield_check])
+    return all([position_x_check, position_y_check, hybrid0_gt_check, hybrid1_gt_check, pb_gt_check, shield_check])
 
 
 def get_file_data():
@@ -286,6 +306,7 @@ def get_file_data():
     with open(file) as data_file:
         lines = data_file.readlines()
     DATA_DICT["component"] = lines[3].split()[3]
+    DATA_DICT["moduleType"] = lines[2].split()[2]
     DATA_DICT["testType"] = "MODULE_METROLOGY"
     DATA_DICT["institution"] = lines[5].split()[1]
     DATA_DICT["runNumber"] = str(lines[8].split()[2])
