@@ -8,8 +8,8 @@ from tkinter import filedialog
 
 X_LIMIT = 0.1 #mm
 Y_LIMIT = 0.3 #mm
-INSTITUTE = 'SFU'
-INSTRUMENT = "Smartscope Flash 302"
+INSTITUTE = 'TRIUMF'
+INSTRUMENT = "Mitutoyo CMM"
 PATH_TO_DATA = 'module_metrology_data/'
 PATH_TO_POSITION_FILES = 'metrology_position_files/'
 SITE_TYPE = 'EC'
