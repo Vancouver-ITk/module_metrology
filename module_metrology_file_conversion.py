@@ -6,16 +6,14 @@ import tkinter as tk
 from tkinter import filedialog
 
 
-X_LIMIT = 0.1 #mm
-Y_LIMIT = 0.3 #mm
-INSTITUTE = 'TRIUMF'
-INSTRUMENT = "Mitutoyo CMM"
+X_LIMIT = 0.250 #mm
+Y_LIMIT = 0.250 #mm
+INSTITUTE = 'SFU'
+INSTRUMENT = "Smartscope Flash 302"
 PATH_TO_DATA = 'module_metrology_data/'
 PATH_TO_POSITION_FILES = 'metrology_position_files/'
 SITE_TYPE = 'EC'
-FLEX_THICKNESS = 0.270 #um (Endcap)
-PROGRAM_VERSION = 'v1'
-GLUE_RANGE = (0.80, 0.160) #um
+PROGRAM_VERSION = 'Vancouver_LocalScript_June2025'
 X = 0
 Y = 1
 Z = 2
@@ -88,7 +86,7 @@ def get_distance_dict(data_dictionary, module_type):
         for row in data[1:]:
             point = data_dictionary.get(row[0],None)[0]
             if point != None:
-                position_dict[row[0]] = [point[X],point[Y]]
+                position_dict[row[0]] = [point[X],point[Y]]                    
     return sort_dict(position_dict)
 
 def get_file_data():
@@ -107,6 +105,8 @@ def get_file_data():
         module_type = module_box.get(module_box.curselection()[0])
         print("Data Collected")
         try:
+            print(module_type)
+            print(data_dict)
             position_dict = get_distance_dict(data_dict, module_type)
         except:
             print("One or more fiducial locations are missing")
@@ -205,7 +205,7 @@ browser_button.place(x = ENTRY_X + 300, y = ENTRY_Y + 40)
 clear_button = tk.Button(frame, text = "Clear Data", command = lambda: clear_data())
 clear_button.place(x = ENTRY_X + 300, y = ENTRY_Y + 100)
 
-module_label = tk.Label(frame, text='Sensor Type')
+module_label = tk.Label(frame, text='Module Type')
 module_label.place(x = ENTRY_X + 90, y = ENTRY_Y + 80)
 module_box = tk.Listbox(frame, width = 10, relief = 'groove', height = '9')
 module_box.place(x = ENTRY_X + 170, y = ENTRY_Y + 80)

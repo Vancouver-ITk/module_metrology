@@ -17,9 +17,9 @@ from tkinter import END
 INSTITUTE = 'SFU'
 INSTRUMENT = "Smartscope Flash 302"
 SITE_TYPE = 'EC'
-HYBRID_FLEX_THICKNESS = 250 #um (Endcap)
-PB_FLEX_THICKNESS = 270 #um (Endcap)
-MAX_SHIELD_HEIGHT = 5710 #um (Endcap)
+HYBRID_FLEX_THICKNESS = 280 #um (Endcap)
+PB_FLEX_THICKNESS = 295 #um (Endcap)
+MAX_SHIELD_HEIGHT = 6110 #um (Endcap)
 
 # Do not modify.
 X_LIMIT = 250 #um
@@ -145,32 +145,9 @@ def get_metrology_results(lines):
     results["ABC1_GLUE_THICKNESS"] = abc1_gt_dict
     results["SHIELDBOX_HEIGHT"] = shield_height
     results["FILE"] = ""
+
     print(results)
 
-    # plt.figure(1)
-    # fig, ax = plt.subplots()
-    # ax.plot(cap_dict.keys(), cap_dict.values(), 'k-', label = "glue height")
-    # ax.plot(cap_dict.keys(), np.full((len(cap_dict), 1), GLUE_RANGE[0]), 'r--', label = "min")
-    # ax.plot(cap_dict.keys(), np.full((len(cap_dict), 1), GLUE_RANGE[1]), 'r--', label = "max")
-    # plt.title("Capacitor Package Heights")
-    # plt.ylabel("Glue Thickness [um]")
-
-    # plt.figure(2)
-    # fig1, ax = plt.subplots()
-    # ax.plot(hybrid_gt_dict.keys(), hybrid_gt_dict.values(), 'k-', label="glue height")
-    # ax.plot(hybrid_gt_dict.keys(), np.full((len(hybrid_gt_dict), 1), GLUE_RANGE[0]), 'r--', label="min")
-    # ax.plot(hybrid_gt_dict.keys(), np.full((len(hybrid_gt_dict), 1), GLUE_RANGE[1]), 'r--', label="max")
-    # plt.title("Hybrid Glue Heights")
-    #plt.ylabel("Glue Thickness [um]")
-
-    # plt.figure(3)
-    # fig2, ax = plt.subplots()
-    # ax.plot(pb_gt_dict.keys(), pb_gt_dict.values(), 'k-', label="glue height")
-    # ax.plot(pb_gt_dict.keys(), np.full((len(pb_gt_dict), 1), GLUE_RANGE[0]), 'r--', label="min")
-    # ax.plot(pb_gt_dict.keys(), np.full((len(pb_gt_dict), 1), GLUE_RANGE[1]), 'r--', label="max")
-    #plt.title("Powerboard Glue Heights")
-    #  plt.ylabel("Glue Thickness [um]")
-    # plt.show()
     return results
 
 def test_passed():
@@ -206,7 +183,7 @@ def test_passed():
     for height in DATA_DICT['results']['ABC1_GLUE_THICKNESS'].values():
         abc1_gts.append(height)
     # hybrid_gt_check = GLUE_RANGE[0] < np.array(hybrid_gts).all() < GLUE_RANGE[1]
-    if DATA_DICT['results']['ABC0_GLUE_THICKNESS'] is not None:
+    if len(abc0_gts) > 0:
         abc0_gts_avg = sum(abc0_gts) / len(abc0_gts)
         print("ABC average glue height under hybrid 0 is:", abc0_gts_avg)
 
@@ -218,7 +195,7 @@ def test_passed():
     else:
         hybrid0_gt_check = True
 
-    if DATA_DICT['results']['ABC1_GLUE_THICKNESS'] is not None:
+    if len(abc1_gts) > 0: 
         abc1_gts_avg = sum(abc1_gts) / len(abc1_gts)
         print("ABC average glue height under hybrid 1 is:", abc1_gts_avg)
 
@@ -319,10 +296,32 @@ def get_file_data():
     properties["MACHINE"] = " ".join(machine[2:])
     properties["OPERATOR"] = " ".join(operator[1:])
     properties["SCRIPT_VERSION"] = lines[9].split()[3]
+    # properties["comments"] = "Campaign: PPB, Hybrid flex thickness = 280um, PB flex thickness = 295um"
     DATA_DICT["properties"] = properties
     DATA_DICT["results"] = get_metrology_results(lines)
     DATA_DICT["results"]["FILE"] = file
     DATA_DICT['passed'] = test_passed()
+
+    fig = plt.figure(figsize=(16,12))
+    ax = plt.axes()
+    ax.plot(DATA_DICT["results"]['HYBRID_GLUE_THICKNESS'].keys(), DATA_DICT["results"]['HYBRID_GLUE_THICKNESS'].values(), 'k-', label="glue height")
+    plt.axhline(y=GLUE_RANGE[0], color='red', linestyle='--', linewidth=2, label='Min')
+    plt.axhline(y=GLUE_RANGE[2], color='red', linestyle='--', linewidth=2, label='Max')
+    plt.axhline(y=GLUE_RANGE[2], color='green', linestyle='--', linewidth=2, label='Target')
+    plt.title(DATA_DICT["component"] + ' Hybrid Glue Heights')
+    plt.ylabel("Glue Thickness [um]")
+    plt.xticks(rotation=90, ha='right')
+    fig.savefig(PATH_TO_DATA + 'metrology_plots/' + DATA_DICT["component"] + '_hybrid_glue_heights')
+
+    fig = plt.figure(figsize=(16,12))
+    ax = plt.axes()
+    ax.plot(DATA_DICT["results"]['PB_GLUE_THICKNESS'].keys(), DATA_DICT["results"]['PB_GLUE_THICKNESS'].values(), 'k-', label="glue height")
+    plt.axhline(y=GLUE_RANGE[0], color='red', linestyle='--', linewidth=2, label='Min')
+    plt.axhline(y=GLUE_RANGE[2], color='red', linestyle='--', linewidth=2, label='Max')
+    plt.axhline(y=GLUE_RANGE[2], color='green', linestyle='--', linewidth=2, label='Target')
+    plt.title(DATA_DICT["component"] + ' Powerboard Glue Heights')
+    plt.ylabel("Glue Thickness [um]")
+    fig.savefig(PATH_TO_DATA + 'metrology_plots/' + DATA_DICT["component"] + '_PB_glue_heights')
 
     # Update the output for the user.
     id_box.configure(state=NORMAL)
@@ -358,36 +357,6 @@ def get_file_data():
     cap_height_box.configure(state=DISABLED)
     shield_height_box.configure(state=DISABLED)
 
-    ##
-    # plt.figure(1)
-    # fig, ax = plt.subplots()
-    # ax.plot(cap_dict.keys(), cap_dict.values(), 'k-', label="glue height")
-    # ax.plot(cap_dict.keys(), np.full((len(cap_dict), 1), GLUE_RANGE[0]), 'r--', label="min")
-    # ax.plot(cap_dict.keys(), np.full((len(cap_dict), 1), GLUE_RANGE[1]), 'r--', label="max")
-    # # plt.plot([1, 2, 3, 4])
-    # plt.title("Capacitor Package Heights")
-    # plt.ylabel("Glue Thickness [um]")
-    #
-    # plt.figure(2)
-    # fig1, ax = plt.subplots()
-    # ax.plot(hybrid_gt_dict.keys(), hybrid_gt_dict.values(), 'k-', label="glue height")
-    # ax.plot(hybrid_gt_dict.keys(), np.full((len(hybrid_gt_dict), 1), GLUE_RANGE[0]), 'r--', label="min")
-    # ax.plot(hybrid_gt_dict.keys(), np.full((len(hybrid_gt_dict), 1), GLUE_RANGE[1]), 'r--', label="max")
-    # # plt.plot([1, 2, 3, 4])
-    # plt.title("Hybrid Glue Heights")
-    # plt.ylabel("Glue Thickness [um]")
-    #
-    # plt.figure(3)
-    # fig2, ax = plt.subplots()
-    # ax.plot(pb_gt_dict.keys(), pb_gt_dict.values(), 'k-', label="glue height")
-    # ax.plot(pb_gt_dict.keys(), np.full((len(pb_gt_dict), 1), GLUE_RANGE[0]), 'r--', label="min")
-    # ax.plot(pb_gt_dict.keys(), np.full((len(pb_gt_dict), 1), GLUE_RANGE[1]), 'r--', label="max")
-    # plt.plot([1, 2, 3, 4])
-    # plt.title("Powerboard Glue Heights")
-    # plt.ylabel("Glue Thickness [um]")
-    # plt.show()
-    #
-
 def save_data():
     """Saves a metrology data file in the standard file format"""
     if problems_box.curselection() == () or DATA_DICT == {}:
@@ -399,11 +368,21 @@ def save_data():
         else: 
             DATA_DICT["problems"] = False
 
+    if retroactive_box.curselection() == () or DATA_DICT == {}:
+        output_text.set('Please ensure all mandatory values have been entered and a data file has been choosen. Then try again.')
+        return 
+    else:
+        if retroactive_box.get(retroactive_box.curselection()[0]) == "GLUED":
+            DATA_DICT["isRetroactive"] = True
+            DATA_DICT["stage"] = "GLUED"
+        else: 
+            DATA_DICT["isRetroactive"] = False        
+            
     db_passcode_1 =  db_pass_1.get()
     db_passcode_2 =  db_pass_2.get()
 
     try :
-        user = itkdb.core.User(accessCode1 = db_passcode_1, accessCode2 = db_passcode_2)
+        user = itkdb.core.User(access_code1 = db_passcode_1, access_code2 = db_passcode_2)
         client = itkdb.Client(user=user)
     except:
         output_text.set("Set passcodes are incorrect. Try again")
@@ -461,11 +440,19 @@ browser_button = tk.Button(frame, text = "Find File", command = lambda: get_file
 browser_button.place(x = ENTRY_X + 300, y = ENTRY_Y + 40)
 
 problems_label = tk.Label(frame, text='Problems?')
-problems_label.place(x = ENTRY_X + 90, y = ENTRY_Y + 380)
-problems_box = tk.Listbox(frame, width = 4, relief = 'groove', height = '2')
-problems_box.place(x = ENTRY_X + 150, y = ENTRY_Y + 380)
+problems_label.place(x = ENTRY_X - 50, y = ENTRY_Y + 440)
+problems_box = tk.Listbox(frame, width = 4, relief = 'groove', height = '2', exportselection=0)
+problems_box.place(x = ENTRY_X + 15, y = ENTRY_Y + 440)
 problems_box.insert(0,"Yes")
 problems_box.insert(1,"No")
+
+retroactive_label = tk.Label(frame, text='Retroactive Upload?')
+retroactive_label.place(x = ENTRY_X + 120, y = ENTRY_Y + 380)
+retroactive_box = tk.Listbox(frame, width = 20, relief = 'groove', height = '2', exportselection=0)
+retroactive_box.place(x = ENTRY_X + 120, y = ENTRY_Y + 400)
+retroactive_box.insert(0,"No")
+retroactive_box.insert(1,"GLUED")
+
 
 id_label = tk.Label(frame, text='SN')
 id_label.place(x = ENTRY_X - 70, y = ENTRY_Y + 40)
@@ -488,7 +475,7 @@ hybrid_deviations_box = scrolledtext.ScrolledText(frame, font = ('calibri', 10),
 hybrid_deviations_box.place(x = ENTRY_X + 40 , y = ENTRY_Y + 80)
 
 
-pb_deviations_label = tk.Label(frame, text='Power Board Deviations (um)')
+pb_deviations_label = tk.Label(frame, text='Powerboard Deviations (um)')
 pb_deviations_label.place(x = ENTRY_X - 95, y = ENTRY_Y + 140)
 pb_deviations_box = scrolledtext.ScrolledText(frame, font = ('calibri', 10), width = 44, height = 2, relief = 'sunken',state=DISABLED)
 pb_deviations_box.place(x = ENTRY_X + 70, y = ENTRY_Y + 140)
@@ -504,7 +491,7 @@ hybrid_gt_label.place(x = ENTRY_X - 95, y = ENTRY_Y + 260)
 hybrid_gt_box = scrolledtext.ScrolledText(frame, font = ('calibri', 10), width = 45, height = 2, relief = 'sunken',state=DISABLED)
 hybrid_gt_box.place(x = ENTRY_X + 60, y = ENTRY_Y + 260)
 
-pb_gt_label = tk.Label(frame, text='Power Board Glue Thickness (um)')
+pb_gt_label = tk.Label(frame, text='Powerboard Glue Thickness (um)')
 pb_gt_label.place(x = ENTRY_X - 95, y = ENTRY_Y + 320)
 pb_gt_box = scrolledtext.ScrolledText(frame, font = ('calibri', 10), width = 41, height = 2, relief = 'sunken',state=DISABLED)
 pb_gt_box.place(x = ENTRY_X + 90, y = ENTRY_Y + 320)
@@ -514,18 +501,18 @@ shield_height_label.place(x = ENTRY_X - 95, y = ENTRY_Y + 380)
 shield_height_box = tk.Text(frame, font = ('calibri', 10), width = 8, height = 1, relief = 'sunken', state=DISABLED)
 shield_height_box.place(x = ENTRY_X + 15, y = ENTRY_Y + 380)
 
-db_pass_1_label = tk.Label(frame, text="AccessCode 1")
-db_pass_1_label.place(x = ENTRY_X + 190, y = ENTRY_Y + 380)
+db_pass_1_label = tk.Label(frame, text="AC1")
+db_pass_1_label.place(x = ENTRY_X + 250, y = ENTRY_Y + 380)
 db_pass_1_box = tk.Entry(frame, textvariable = db_pass_1, show='*', justify = 'left', width = 15)
-db_pass_1_box.place(x = ENTRY_X + 270, y = ENTRY_Y + 380)
+db_pass_1_box.place(x = ENTRY_X + 280, y = ENTRY_Y + 380)
 
-db_pass_2_label = tk.Label(frame, text="AccessCode 2")
-db_pass_2_label.place(x = ENTRY_X + 190, y = ENTRY_Y + 410)
+db_pass_2_label = tk.Label(frame, text="AC2")
+db_pass_2_label.place(x = ENTRY_X + 250, y = ENTRY_Y + 410)
 db_pass_2_box = tk.Entry(frame, textvariable = db_pass_2, show='*',  justify = 'left', width = 15)
-db_pass_2_box.place(x = ENTRY_X + 270, y = ENTRY_Y + 410)
+db_pass_2_box.place(x = ENTRY_X + 280, y = ENTRY_Y + 410)
 
 output_text_box = tk.Message(frame, textvariable = output_text, font = ('calibri', 10), width = 344, relief = 'sunken', justify = 'left')
-output_text_box.place(x = ENTRY_X - 30, y = ENTRY_Y + 440)
+output_text_box.place(x = ENTRY_X - 30, y = ENTRY_Y + 480)
 output_text.set('Please enter the database serial number. Select \'Yes\' or \'No\' for if problems existed during testing.'
 ' Look for a data file using the \'Find File\' button to import data from an appropriate CSV.' 
 'If everything looks correct press \'Save Data\' to upload to the database.' )
