@@ -3,11 +3,15 @@ import re
 import module_metrology as mm
 import tkinter as tk
 from tkinter import filedialog
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib import cm
+from matplotlib.ticker import LinearLocator
 
 X_LIMIT = 0.1 #mm
 Y_LIMIT = 0.3 #mm
-INSTITUTE = 'TRIUMF'
-INSTRUMENT = "Mitutoyo CMM"
+INSTITUTE = 'SFU'
+INSTRUMENT = "Smartscope Flash 302"
 PATH_TO_DATA = 'module_metrology_data/'
 PATH_TO_POSITION_FILES = 'metrology_position_files/'
 SITE_TYPE = 'EC'
@@ -51,6 +55,7 @@ def get_file_data():
 
     output_text.set("File found and data parsed. Can now save to standard file format.")
 
+
 def save_data():
     """Saves a metrology data file in the standard file format"""
 
@@ -84,6 +89,35 @@ def save_data():
         file.write(f'Sensor {point[X]:0.4f} {point[Y]:0.4f} {point[Z]:0.4f}\n')
     file.close()
     output_text.set('Output saved to ' + full_path)
+
+    sensor_x, sensor_y, sensor_z = [],[],[]
+
+    # produce plot of bow data 
+    for point in DATA_DICT['SENSOR']:
+        sensor_x.append(point[X])
+        sensor_y.append(point[Y])
+        sensor_z.append(point[Z])
+    # convert to numpy arrays
+    sensor_x = np.array(sensor_x)
+    sensor_y = np.array(sensor_y)
+    sensor_z = np.array(sensor_z)
+    
+    print(sensor_x)
+    print(sensor_y)
+    print(sensor_z)
+        
+    fig = plt.figure(figsize=(12,14))
+    ax = plt.axes(projection='3d')
+    # ax.scatter(sensor_x, sensor_y, sensor_z, c='blue', marker='o', s=50) 
+    ax.plot_trisurf(sensor_x, sensor_y, sensor_z, vmin=sensor_z.min() * 2, cmap=cm.YlGnBu)
+    plt.title(module_ref)
+    ax.set_xlabel('[mm]')
+    ax.set_ylabel('[mm]')
+    ax.set_zlabel('[mm]')
+    fig.tight_layout()
+    fig.savefig(path_to_save + 'bow_plots/' + module_ref)
+    # fig.colorbar(surf, shrink=0.5, aspect=5)   
+    plt.show()
 
 # GUI Definition
 root = tk.Tk()
@@ -144,5 +178,6 @@ output_text_box.place(x = ENTRY_X - 30, y = ENTRY_Y + 250)
 output_text.set('Please enter the database serial number, operator name and run number. Select the module type. '
 'Look for a data file using the \'Find File\' button to import data from an appropriate CSV.' 
 'If everything looks correct press \'Save Data\' to produce the standard file format.' )
+
 
 root.mainloop()
