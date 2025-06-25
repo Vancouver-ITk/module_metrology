@@ -117,7 +117,7 @@ def save_data():
     fig.tight_layout()
     fig.savefig(path_to_save + 'bow_plots/' + module_ref)
     # fig.colorbar(surf, shrink=0.5, aspect=5)   
-    plt.show()
+    # plt.show()
 
 # GUI Definition
 root = tk.Tk()
