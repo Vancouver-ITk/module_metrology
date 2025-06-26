@@ -307,21 +307,25 @@ def get_file_data():
     ax.plot(DATA_DICT["results"]['HYBRID_GLUE_THICKNESS'].keys(), DATA_DICT["results"]['HYBRID_GLUE_THICKNESS'].values(), 'k-', label="glue height")
     plt.axhline(y=GLUE_RANGE[0], color='red', linestyle='--', linewidth=2, label='Min')
     plt.axhline(y=GLUE_RANGE[2], color='red', linestyle='--', linewidth=2, label='Max')
-    plt.axhline(y=GLUE_RANGE[2], color='green', linestyle='--', linewidth=2, label='Target')
+    plt.axhline(y=GLUE_RANGE[1], color='green', linestyle='--', linewidth=2, label='Target')
     plt.title(DATA_DICT["component"] + ' Hybrid Glue Heights')
     plt.ylabel("Glue Thickness [um]")
     plt.xticks(rotation=90, ha='right')
     fig.savefig(PATH_TO_DATA + 'metrology_plots/' + DATA_DICT["component"] + '_hybrid_glue_heights')
 
-    fig = plt.figure(figsize=(16,12))
-    ax = plt.axes()
-    ax.plot(DATA_DICT["results"]['PB_GLUE_THICKNESS'].keys(), DATA_DICT["results"]['PB_GLUE_THICKNESS'].values(), 'k-', label="glue height")
-    plt.axhline(y=GLUE_RANGE[0], color='red', linestyle='--', linewidth=2, label='Min')
-    plt.axhline(y=GLUE_RANGE[2], color='red', linestyle='--', linewidth=2, label='Max')
-    plt.axhline(y=GLUE_RANGE[2], color='green', linestyle='--', linewidth=2, label='Target')
-    plt.title(DATA_DICT["component"] + ' Powerboard Glue Heights')
-    plt.ylabel("Glue Thickness [um]")
-    fig.savefig(PATH_TO_DATA + 'metrology_plots/' + DATA_DICT["component"] + '_PB_glue_heights')
+    # left half modules don't have a powerboard
+    if DATA_DICT["moduleType"] not in ['3L', '4L', '5L', 'MA', 'MC', 'ME']:
+        fig = plt.figure(figsize=(16,12))
+        ax = plt.axes()
+        ax.plot(DATA_DICT["results"]['PB_GLUE_THICKNESS'].keys(), DATA_DICT["results"]['PB_GLUE_THICKNESS'].values(), 'k-', label="glue height")
+        plt.axhline(y=GLUE_RANGE[0], color='red', linestyle='--', linewidth=2, label='Min')
+        plt.axhline(y=GLUE_RANGE[2], color='red', linestyle='--', linewidth=2, label='Max')
+        plt.axhline(y=GLUE_RANGE[1], color='green', linestyle='--', linewidth=2, label='Target')
+        plt.title(DATA_DICT["component"] + ' Powerboard Glue Heights')
+        plt.ylabel("Glue Thickness [um]")
+        fig.savefig(PATH_TO_DATA + 'metrology_plots/' + DATA_DICT["component"] + '_PB_glue_heights')
+    else: 
+        pass
 
     # Update the output for the user.
     id_box.configure(state=NORMAL)
