@@ -190,7 +190,7 @@ def save_data():
     db_passcode_2 =  db_pass_2.get()
 
     try :
-        user = itkdb.core.User(accessCode1 = db_passcode_1, accessCode2 = db_passcode_2)
+        user = itkdb.core.User(access_code1 = db_passcode_1, access_code2 = db_passcode_2)
         client = itkdb.Client(user=user)
     except:
         output_text.set("Set passcodes are incorrect. Try again")

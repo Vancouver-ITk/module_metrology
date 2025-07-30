@@ -5,29 +5,48 @@ GUIs for upload bow and metrology test data.
 # Dependencies
 
 Depends on the GUI library tkinter, numpy, itkdb and requests.
+itkdb version must be newer than v0.4, this will affect ITkDB access. 
 
 # Installation
+Windows: 
 
-Only the dependencies need to be installed.
-
-Windows:
-
+To create a virtual environment to ensure correct package versions are installed, running the following commands: 
 ```
-pip install tk numpy itkdb requests
+python -m venv venv 
+venv\Scripts\activate
+```
+Then run the following command to install all requireed packages
+```
+pip install -r requirements.txt
+```
+To close virtual environment, if desired, run following command: 
+```
+deactivate
 ```
 
-MAC:
-
+To reopen virtual environment, simply run (has be to be done before using upload script): 
 ```
-pip3 install tk numpy itkdb requests
+venv\Scripts\activate
 ```
 
-CENTOS: 
-
+Linux: 
+To create a virtual environment to ensure correct package versions are installed, running the following commands: 
 ```
-yum install python3-tkinter
+python -m venv venv 
+source .venv/bin/activate
+```
+Then run the following command to install all requireed packages
+```
+pip install -r requirements.txt
+```
+To close virtual environment, if desired, run following command: 
+```
+deactivate
+```
 
-pip3 install numpy requests itkdb --user
+To reopen virtual environment, simply run (has be to be done before using upload script): 
+```
+source .venv/bin/activate
 ```
 
 # Edits
@@ -75,7 +94,7 @@ The GUI will pop up and request that you find a file, the run number and if prob
 
 There are two other scripts in this folder:
 
-``module_bow_TRIUMF_file_conversion.py`` and ``module_bow_TRIUMF_file_conversion.py``. These are for converting files from the TRIUMF CMM raw data file format to the format expected by the database.
+``module_bow_file_conversion.py`` and ``module_metrology_file_conversion.py``. These are for converting files from the TRIUMF CMM raw data file format to the format expected by the database.
 
 Running them is similar to above except each needs more user entered parameters like the DB serial number and operator. Raw data files need to be converted to the DB standard format before upload. 
 
