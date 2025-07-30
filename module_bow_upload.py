@@ -12,13 +12,13 @@ from tkinter.constants import DISABLED, NORMAL
 from tkinter import END
 
 # Institute Specific Constants - MODIFY THESE!
-INSTITUTE = 'TRIUMF'
-INSTRUMENT = "Mitutoyo QV"
+INSTITUTE = 'SFU'
+INSTRUMENT = "Smartscope Flash 302"
 SITE_TYPE = 'EC'
 
 # Program Constants - Do not modify 
 PATH_TO_DATA = 'module_metrology_data/bow_data/'
-PROGRAM_VERSION = 'Strips_CommonWebApp'
+PROGRAM_VERSION = 'July2025'
 BOW_RANGE = (-50, 150) #um
 X = 0
 Y = 1
@@ -26,7 +26,6 @@ Z = 2
 ENTRY_X = 100
 ENTRY_Y = 20
 DATA_DICT = dict()
-
 
 def round(number, decimal=2):
     """Truncates a float to a value given by decimal. Default is 2 decimal places."""
@@ -96,34 +95,6 @@ def get_bow_results(lines):
     else:
         DATA_DICT['passed'] = False
         output_text.set("Bow failed. Press save if you wish to upload.")
-    
-    # temp_xy = []
-    # temp_z = []
-    # for row in sensor_data:
-    #     #temp_xy.append([row[X]**2, row[Y]**2, row[X], row[Y], 1])
-    #     temp_xy.append([row[X]**2, row[Y]**2, 1])
-    #     temp_z.append(row[Z])
-    # z = np.matrix(temp_z).T
-    # xy = np.matrix(temp_xy)
-    # c = ((xy.T * xy).I * xy.T * z).T
-
-    #CODE TO LOOK AT PLOT 
-    # sensor_data = np.array(sensor_data)
-    # i = sensor_data[:,X]
-    # j = sensor_data[:,Y]
-    # I, J = np.meshgrid(i,j)
-    # z_pred = c[0,0]*I**2 + c[0,1]*J**2 + c[0,2]*I + c[0,3]*J + c[0,4]
-    # data = np.array(sensor_data)
-    # x = data[:,X]
-    # y = data[:,Y]
-    # z = data[:,Z]
-    # ax = plt.axes(projection='3d')
-    # ax.scatter3D(x, y, z)
-    # # ax.plot_surface(x,y,z_pred, rstride=1, cstride=1, cmap='viridis')
-    # ax.set_xlabel('X')
-    # ax.set_ylabel('Y')
-    # ax.set_zlabel('Z')
-    # plt.show()
 
     return results
 
@@ -204,7 +175,10 @@ def save_data():
             DATA_DICT["stage"] = "GLUED"
         elif retroactive_box.get(retroactive_box.curselection()[0]) == "FINISHED":
             DATA_DICT["isRetroactive"] = True
-            DATA_DICT["stage"] = "FINISHED_MODULE"    
+            DATA_DICT["stage"] = "FINISHED"  
+        elif retroactive_box.get(retroactive_box.curselection()[0]) == "STITCH-BONDING":
+            DATA_DICT["isRetroactive"] = True
+            DATA_DICT["stage"] = "STITCH_BONDING"        
         else: 
             DATA_DICT["isRetroactive"] = False 
 
@@ -285,11 +259,12 @@ problems_box.insert(1,"No")
 
 retroactive_label = tk.Label(frame, text='Retroactive Upload?')
 retroactive_label.place(x = ENTRY_X + 60, y = ENTRY_Y + 170)
-retroactive_box = tk.Listbox(frame, width = 20, relief = 'groove', height = '3', exportselection=0)
+retroactive_box = tk.Listbox(frame, width = 20, relief = 'groove', height = '4', exportselection=0)
 retroactive_box.place(x = ENTRY_X + 60, y = ENTRY_Y + 190)
 retroactive_box.insert(0,"No")
 retroactive_box.insert(1,"GLUED")
 retroactive_box.insert(2,"FINISHED")
+retroactive_box.insert(2,"STITCH-BONDING")
 
 id_label = tk.Label(frame, text='SN')
 id_label.place(x = ENTRY_X - 70, y = ENTRY_Y + 40)
