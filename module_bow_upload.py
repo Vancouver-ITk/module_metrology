@@ -19,7 +19,7 @@ SITE_TYPE = 'EC'
 # Program Constants - Do not modify 
 PATH_TO_DATA = 'module_metrology_data/bow_data/'
 PROGRAM_VERSION = 'July2025'
-BOW_RANGE = (-50, 150) #um
+BOW_RANGE = (-50, 250) #um
 X = 0
 Y = 1
 Z = 2
