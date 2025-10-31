@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import cm
 from matplotlib.ticker import LinearLocator
+import os
+from pathlib import Path
 
 X_LIMIT = 0.1 #mm
 Y_LIMIT = 0.3 #mm
@@ -15,7 +17,7 @@ INSTRUMENT = "Smartscope Flash 302"
 PATH_TO_DATA = 'module_metrology_data/'
 PATH_TO_POSITION_FILES = 'metrology_position_files/'
 SITE_TYPE = 'EC'
-PROGRAM_VERSION = 'Vancouver_LocalScript_June2025'
+PROGRAM_VERSION = 'Vancouver_LocalScript_Nov2025'
 X = 0
 Y = 1
 Z = 2
@@ -69,8 +71,9 @@ def save_data():
     module_type = module_box.get(module_box.curselection()[0])
     file_prefix = module_ref + "_" + module_type + '_MODULE_BOW_'
     path_to_save = PATH_TO_DATA + 'bow_data/'
-    full_path = mm.get_file_output(file_prefix, path_to_save, int(run_number))
-    
+    local_path = mm.get_file_output(file_prefix, path_to_save, int(run_number))
+    full_path = os.path.dirname(os.path.abspath(__file__)) + '//' + local_path
+
     #Open the data file and write to it.
     file = open(full_path,'w+')
     file.write('#---Header\n')
@@ -115,7 +118,7 @@ def save_data():
     ax.set_ylabel('[mm]')
     ax.set_zlabel('[mm]')
     fig.tight_layout()
-    fig.savefig(path_to_save + 'bow_plots/' + module_ref)
+    fig.savefig(os.path.dirname(os.path.abspath(__file__)) + '//module_metrology_data//bow_data//bow_plots//' + module_ref + '_' + run_number)
     # fig.colorbar(surf, shrink=0.5, aspect=5)   
     # plt.show()
 
