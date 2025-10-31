@@ -4,6 +4,7 @@ import re
 import module_metrology as mm
 import tkinter as tk
 from tkinter import filedialog
+import os
 
 
 X_LIMIT = 0.250 #mm
@@ -145,7 +146,9 @@ def save_data():
     module_type = module_box.get(module_box.curselection()[0])
     file_prefix = module_ref + "_" + module_type + '_MODULE_METROLOGY_'
     path_to_save = PATH_TO_DATA + 'metrology_data/'
-    full_path = mm.get_file_output(file_prefix, path_to_save, int(run_number))
+    # full_path = mm.get_file_output(file_prefix, path_to_save, int(run_number))
+    local_path = mm.get_file_output(file_prefix, path_to_save, int(run_number))
+    full_path = os.path.dirname(os.path.abspath(__file__)) + '//' + local_path
     print(DATA_DICT)
     #Open the data file and write to it.
     file = open(full_path,'w+')
